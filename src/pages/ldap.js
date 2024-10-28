@@ -1,4 +1,4 @@
-import { Client } from "ldapts"
+const { Client } = require("ldapts")
 
 const client = new Client({
     url: "ldap://192.168.30.15",
@@ -15,7 +15,10 @@ async function LdapOperation() {
 
     try {
         const {searchEntries, searchReferences} = await client.search("dc=example,dc=com", {
-            scope:"sub"
+            //scope:"sub"
+            scope: "one"
+            //scope: "base"
+            //scope: "children"
         })
         searchEntries.forEach((entry) => {
             console.log(entry)
