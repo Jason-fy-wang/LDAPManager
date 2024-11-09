@@ -8,7 +8,8 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: false
         }
     })
     
@@ -18,7 +19,7 @@ const createWindow = () => {
     
     if (process.env.NODE_ENV === "dev") {
         console.log("path: ", __dirname)
-        win.loadURL("http://localhost:8080/")
+        win.loadURL("http://localhost:5173/")
         win.webContents.openDevTools()
     }else {
         win.loadFile("./public/index.html")

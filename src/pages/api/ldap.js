@@ -9,5 +9,5 @@ const ldap = {
 
 
 
-module.exports = {ldap}
+export {ldap}
 

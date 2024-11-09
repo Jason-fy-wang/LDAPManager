@@ -1,14 +1,15 @@
 {
   "name": "ldapmanage",
   "version": "0.1.0",
+  "type": "commonjs",
   "private": true,
   "main": "src/electron/main.js",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vite",
+    "build": "vue-tsc && vite build",
     "lint": "vue-cli-service lint",
     "start": "concurrently -k \"npm run serve\"  \"npm run electron\"",
-    "electron": "wait-on \"http://localhost:8080\" && cross-env NODE_ENV=dev electron ."
+    "electron": "wait-on \"http://localhost:5173\" && cross-env NODE_ENV=dev electron ."
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -18,6 +19,7 @@
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@vue/cli-plugin-babel": "~5.0.0",
@@ -31,6 +33,7 @@
     "eslint-plugin-vue": "^8.0.3",
     "less": "^4.2.0",
     "mocha": "^10.7.3",
+    "vite": "^5.4.10",
     "wait-on": "^8.0.1"
   },
   "eslintConfig": {
