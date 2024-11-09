@@ -15,13 +15,14 @@
     "core-js": "^3.8.3",
     "element-plus": "^2.8.7",
     "ldapts": "^7.2.1",
+    "normalize.css": "^8.0.1",
     "vue": "^3.2.13",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.1.4",
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@vitejs/plugin-vue": "^5.1.4",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
