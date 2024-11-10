@@ -2,6 +2,9 @@ const {app, BrowserWindow, Menu, ipcMain} = require('electron')
 const {LdapSearchAll} = require("./ldap/ldap")
 const path = require("node:path")
 
+try {
+    require('electron-reloader')(module)
+}catch(_){}
 
 const createWindow = () => {
     const win = new BrowserWindow ({
