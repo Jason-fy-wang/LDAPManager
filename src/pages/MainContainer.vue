@@ -10,7 +10,9 @@
           <el-tree 
             :data="treeData"
             :props="defaultProps"
+            :highlight-current="true"
             @node-click="nodeClick"
+            :render-content="renderTreeNode"
           >
           </el-tree>
         </el-aside>
@@ -21,7 +23,7 @@
     </el-container>
   </div>
 </template>
-<script setup name="Main">
+<script setup name="Main" lang="jsx">
 import { RouterView } from 'vue-router'
 import {ldap} from './api/ldap'
 import {ref, onMounted, reactive, computed} from 'vue'
@@ -31,6 +33,16 @@ const router = useRouter()
 const defaultProps = {
   children: 'children',
   label: 'label'
+}
+
+function renderTreeNode (h, {node, data}) {
+  console.log("data = ", data)
+  return (
+    <span>
+      <el-icon size="20" style="margin-right: 5px;"><Folder /></el-icon>
+      {data.label}
+    </span>
+  )
 }
 
 function nodeClick(data) {
@@ -139,7 +151,7 @@ function buildDn(maps,res) {
     .main-side{
       width: 18vw;
       height: 100vh;
-      background-color: blueviolet;
+      //background-color: blueviolet;
     }
 
     .display-content{

@@ -3,6 +3,8 @@
         <h2>Detail</h2>
 
         <h3>{{ route.params.dn }}</h3>
+
+        
     </div>
 </template>
 <script setup name="Detail">

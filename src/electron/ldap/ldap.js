@@ -7,7 +7,7 @@ const client = new Client({
 
 async function LdapSearchAll() {
     try {
-        await client.bind("cn=admin,dc=example,dc=com","loongson")
+        await client.bind("cn=admin,dc=example,dc=com",process.env.pwd)
         console.log("connect success")
     }catch(ex) {
         console.log("connect fail")
@@ -35,5 +35,24 @@ async function LdapSearchAll() {
     }
 }
 
+async function LdapSearchWithDn(dn) {
+    try {
+        await client.bind("cn=admin,dc=example,dc=com",process.env.pwd)
+        console.log("connect success")
+    }catch(ex) {
+        console.log("connect fail.")
+    }
 
-module.exports = {LdapSearchAll}
+    try {
+        const {searchEntries, searchReferences} = await client.search(dn, {
+            scope: "base"
+        })
+
+        return searchEntries
+    }catch(ex) {
+        console.log("search error: ",ex)
+    }
+}
+
+
+module.exports = {LdapSearchAll, LdapSearchWithDn}

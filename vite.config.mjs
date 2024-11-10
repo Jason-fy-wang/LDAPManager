@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "node:path"
-
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default defineConfig({
   resolve: {
@@ -12,5 +12,8 @@ export default defineConfig({
   server: {
     host: true
   },
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    vueJsx()
+  ],
 })
