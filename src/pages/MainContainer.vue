@@ -25,15 +25,45 @@
 import { RouterView } from 'vue-router'
 import {ldap} from './api/ldap'
 import {ref, onMounted, reactive, computed} from 'vue'
+import { useRouter } from 'vue-router'
 
-
+const router = useRouter()
 const defaultProps = {
   children: 'children',
   label: 'label'
 }
 
 function nodeClick(data) {
-  console.log(data)
+  const dn = getFullDn(treeData.value, data.label)
+  console.log(dn)
+  router.push({name: "detail", params: {dn}})
+}
+
+function getFullDn(data, targetLabel){
+    let path = []
+
+    function search(nodes, curpath) {
+        for (let node of nodes) {
+
+            const newpath = [...curpath, node.label]
+
+            if (node.label === targetLabel) {
+                path = newpath
+                return path
+            }
+
+            if (node.children && node.children.length > 0) {
+                if(search(node.children,  newpath)){
+                    return true
+                }
+            }
+        }
+    }
+
+    search(data, [])
+
+    return path.length >0 ? path.reverse().join(","):null
+
 }
 
 let allAccount = ref([])

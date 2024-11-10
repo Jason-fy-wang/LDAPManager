@@ -26,11 +26,11 @@ it('length should be greate 0', function() {
     console.log(JSON.stringify(jsondata))
 
     const result = []
-
     recure(jsondata, result)
     console.log(JSON.stringify(result))
-  })
 
+  })
+  
 function recure(maps,res) {
   if (maps) {
    Object.keys(maps).forEach(k => {

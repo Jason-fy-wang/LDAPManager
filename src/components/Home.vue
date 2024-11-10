@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Home</h1>
+        <h1>Ldapmanager</h1>
     </div>
 </template>
 <script setup name="Home">
