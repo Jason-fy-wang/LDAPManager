@@ -50,9 +50,9 @@ async function LdapSearchWithDn(dn) {
             scope: "base"
         })
         
-        searchEntries.forEach((entry) => {
-            console.log(entry)
-        })
+        // searchEntries.forEach((entry) => {
+        //     console.log(entry)
+        // })
         return searchEntries
     }catch(ex) {
         console.log("search error: ",ex)
@@ -76,9 +76,10 @@ async function LdapSearchObjectclass() {
             attributes: ["objectClasses"]
         })
 
-        searchEntries.forEach(element => {
-            console.log(element)
-        });
+        // searchEntries.forEach(element => {
+        //     console.log(element)
+        // });
+        return searchEntries
     }catch(ex) {
         throw ex
     }finally {
@@ -86,7 +87,4 @@ async function LdapSearchObjectclass() {
     }
 }
 
-LdapSearchObjectclass()
-
-
-module.exports = {LdapSearchAll, LdapSearchWithDn}
+module.exports = {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass}

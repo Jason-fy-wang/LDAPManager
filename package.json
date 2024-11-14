@@ -5,11 +5,12 @@
   "private": true,
   "main": "src/electron/main.js",
   "scripts": {
-    "serve": "vite",
+    "serve": "vite --port 5173",
     "build": "vue-tsc && vite build",
     "lint": "vue-cli-service lint",
     "start": "concurrently -k \"npm run serve\"  \"npm run electron\"",
-    "electron": "wait-on \"http://localhost:5173\" && cross-env NODE_ENV=dev electron ."
+    "electron": "sleep 2s && cross-env NODE_ENV=dev electron .",
+    "electron_local": "cross-env NODE_ENV=dev electron ."
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

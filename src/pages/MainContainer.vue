@@ -81,9 +81,16 @@ function getFullDn(data, targetLabel){
 let allAccount = ref([])
 
 onMounted( async () => {
-  allAccount.value = await ldap.searchAll()
-    console.log(allAccount)
-  });
+    allAccount.value = await ldap.searchAll()
+    //console.log(allAccount)
+    const res = await ldap.objectClasses()  
+    console.log("object class:", res)
+
+    const dn = await ldap.searchDn("uid=john,ou=person,dc=example,dc=com")
+    console.log("dn : ", dn)
+  }
+  
+);
 
 const treeData = computed(() => {
      let data = {}

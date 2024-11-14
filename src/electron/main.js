@@ -1,5 +1,5 @@
 const {app, BrowserWindow, Menu, ipcMain} = require('electron')
-const {LdapSearchAll} = require("./ldap/ldap")
+const {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass} = require("./ldap/ldap")
 const path = require("node:path")
 
 try {
@@ -34,9 +34,21 @@ function searchAll() {
     return result
 }
 
+function searchObjectClass() {
+    return LdapSearchObjectclass()
+}
+
+function searchDn(event, dn) {
+    return LdapSearchWithDn(dn)
+}
+
 
 app.whenReady().then( () => {
     ipcMain.handle("ldap:all", searchAll)
+
+    ipcMain.handle("ldap:objectclass", searchObjectClass)
+
+    ipcMain.handle("ldap:dn", searchDn)
 
     createWindow()
 
