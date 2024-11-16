@@ -8,7 +8,7 @@ const useLdap = () => {
 
     const objectClasses = async ()=>{
         const res = await window.EAPI.objectClasses()
-        console.log("render objectClasses:", res)
+        //console.log("render objectClasses:", res)
         return res
     }
     const searchDn = async (dn) => {
@@ -19,7 +19,7 @@ const useLdap = () => {
 
     const getObjectAttribute = (objectClasses) => {
         // 正则表达式匹配 MUST 和 MAY 属性
-        const attributeRegex = /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\)]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
+        const attributeRegex =  /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\) ]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
         const attributes = {}
         if (objectClasses["objectClasses"]){
             objectClasses["objectClasses"].forEach(objectClass => {

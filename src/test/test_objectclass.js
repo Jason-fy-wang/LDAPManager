@@ -2,7 +2,7 @@ const {objectclasses, objectclasses2} = require('./data2')
 
 function testAttribute() {
     // 正则表达式匹配 MUST 和 MAY 属性
-    const attributeRegex = /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\)]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
+    const attributeRegex = /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\) ]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
     const attributes = {}
     objectclasses2["objectClasses"].forEach(objectClass => {
         let match,NAME;

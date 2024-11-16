@@ -36,7 +36,7 @@ const defaultProps = {
 }
 
 function renderTreeNode (h, {node, data}) {
-  console.log("data = ", data)
+  //console.log("data = ", data)
   return (
     <span>
       <el-icon size="20" style="margin-right: 5px;"><Folder /></el-icon>

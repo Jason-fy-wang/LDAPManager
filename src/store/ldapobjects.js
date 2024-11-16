@@ -8,12 +8,13 @@ export const useObjectAttributes = defineStore("objectattribute",{
         }),
         actions: {
             async fetchAttribute() {
-                const {objectClasses, getObjectAttribute} = useLdap()
-                const objs = await objectClasses()
-                console.log("got objs: ", objs)
-                const res = await getObjectAttribute(objs[0])
-                console.log("got res: ", res)
-                this.attributes = res
+                //if (!this.attributes.top) {
+                    const {objectClasses, getObjectAttribute} = useLdap()
+                    const objs = await objectClasses()
+                    const res = await getObjectAttribute(objs[0])
+                    console.log("got res: ", res)
+                    this.attributes = res
+                //}
             },
         }
     }
