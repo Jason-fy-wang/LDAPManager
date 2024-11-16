@@ -1,20 +1,14 @@
 <template>
-    <div>
+    <div class="main-content">
         <h2>Detail</h2>
-
-        <h3>parameters: {{ route.params.dn }}</h3>
-
-        <h5>obj: {{  dnObject }}</h5>
-
-        <h5>attributes: {{  dnAttributes }}</h5>
-
         <el-form label-width="auto" style="max-width: 25vw;">
-            <el-form-item v-for="item in dnAttributes"  :label="item">
+            <el-form-item v-for="item in dnAttributes" :label="item" class="display-input-label">
                 <el-input
                     type="string"
                     :readonly="true"
                     :value="dnObject[item]"
                     :show-password="item.indexOf('Password')>=0 || item.indexOf('password')>=0"
+                    class="display-input"
                 />
             </el-form-item>
         </el-form>
@@ -91,5 +85,29 @@ onMounted( async () => {
 
 
 <style lang="less">
-    
+    .main-content{
+        .display-input-label {
+            .el-input__wrapper{
+                background-color: #16142a;
+            }
+            .el-form-item__label {
+                color: white;
+                font-weight: bold;
+            }
+
+
+            .display-input {
+                border: 2px solid rgb(45, 49, 49) !important; 
+                border-radius: 5px; 
+
+                .el-input__inner {
+                    box-shadow: none;
+                    color: white;
+                    font-weight: 700;
+                }
+
+            }
+        }
+
+    }
 </style>

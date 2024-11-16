@@ -1,21 +1,25 @@
 <template>
 <div>
     <el-container class="main-container">
-      <el-header class="main-header">
-        <h2>Ldapmanager</h2>
-      </el-header>
+      <el-aside class="main-side">
+        <div class="left-side-image">
+          <el-image :src="ldapimage"/>
+        </div>
+        <div class="spliter"></div>
+      <el-tree 
+        :data="treeData"
+        :props="defaultProps"
+        highlight-current
+        @node-click="nodeClick"
+        :render-content="renderTreeNode"
+        class="left-side-tree"
+      >
+      </el-tree>
+      </el-aside>
       <el-container class="main-content">
-        <el-aside class="main-side">
-
-          <el-tree 
-            :data="treeData"
-            :props="defaultProps"
-            :highlight-current="true"
-            @node-click="nodeClick"
-            :render-content="renderTreeNode"
-          >
-          </el-tree>
-        </el-aside>
+        <el-header class="main-header">
+            <h2>Ldapmanager</h2>
+        </el-header>
         <el-main class="display-content">
           <RouterView/>
         </el-main>
@@ -28,6 +32,7 @@ import { RouterView } from 'vue-router'
 import useLdap from './api/useLdap'
 import {ref, onMounted, reactive, computed} from 'vue'
 import { useRouter } from 'vue-router'
+import ldapimage from '@/assets/ldap.png'
 
 const router = useRouter()
 const defaultProps = {
@@ -153,18 +158,66 @@ function buildDn(maps,res) {
 
     .main-header {
       height: 10vh;
-      background-color: whitesmoke;
+      background-color: #16142a;
+      color: #97b1cd;
+      border-bottom: 2px solid rgb(45, 49, 49);
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      
     }
 
     .main-side{
       width: 18vw;
       height: 100vh;
-      //background-color: blueviolet;
+      background-color: #16142a;
+      border-right: 2px solid rgb(45, 49, 49);
+      // side image
+      .left-side-image {
+        width: 10vw;
+        margin-top: 1vh;
+        margin-left: 3vw;
+
+      }
+
+      .spliter{
+        height: 1px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        margin-left: 16px;
+        width: 90%;
+        background-color: rgb(45, 49, 49);
+      }
+
+      .left-side-tree {
+        margin-left: 1vw;
+        background-color: #16142a;
+        font-size: 17px;
+        font-weight: 800;
+        color: #4b458d;
+          .el-tree-node__content {
+            &:hover {
+            background-color: #4e72ec; /* 鼠标悬停时的背景色 */
+            }
+        }
+        // hightlight selected tree node 
+        .el-tree-node {
+          .is-current {
+            background-color: #2451f4;
+          }
+        }
+      }
     }
 
     .display-content{
       height: 100vh;
-      background-color: antiquewhite;
+      background-color: #16142a;
+      font-size: 17px;
+      font-weight: bold;
+      color:white;
+      border-left-width: 10px;
+      border-left-color: white;
     }
   }
 
