@@ -18,6 +18,7 @@
     "element-plus": "^2.8.7",
     "ldapts": "^7.2.1",
     "normalize.css": "^8.0.1",
+    "pinia": "^2.2.6",
     "vue": "^3.2.13",
     "vue-router": "^4.4.5"
   },

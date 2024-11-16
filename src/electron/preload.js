@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld("EAPI", {
 
     objectClasses: () => {
         const res = ipcRenderer.invoke("ldap:objectclass")
-        console.log("preload objectClass: ", res)
+        //console.log("preload objectClass: ", res)
         return res
     },
     searchDn: (dn) => {

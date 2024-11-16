@@ -25,7 +25,7 @@
 </template>
 <script setup name="Main" lang="jsx">
 import { RouterView } from 'vue-router'
-import {ldap} from './api/ldap'
+import useLdap from './api/useLdap'
 import {ref, onMounted, reactive, computed} from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -81,13 +81,14 @@ function getFullDn(data, targetLabel){
 let allAccount = ref([])
 
 onMounted( async () => {
-    allAccount.value = await ldap.searchAll()
+    const {searchAll, objectClasses} = useLdap()
+    allAccount.value = await searchAll()
     //console.log(allAccount)
-    const res = await ldap.objectClasses()  
+    const res = await objectClasses()  
     console.log("object class:", res)
 
-    const dn = await ldap.searchDn("uid=john,ou=person,dc=example,dc=com")
-    console.log("dn : ", dn)
+    //const dn = await searchDn("uid=john,ou=person,dc=example,dc=com")
+    //console.log("dn : ", dn)
   }
   
 );
