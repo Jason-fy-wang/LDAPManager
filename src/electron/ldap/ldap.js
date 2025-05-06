@@ -56,6 +56,7 @@ async function LdapSearchWithDn(dn) {
         return searchEntries
     }catch(ex) {
         console.log("search error: ",ex)
+        return null
     }finally{
         await client.unbind()
     }
@@ -87,4 +88,39 @@ async function LdapSearchObjectclass() {
     }
 }
 
-module.exports = {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass}
+async function LdapEntryAdd(dn, attrs) {
+    try {
+        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+    }catch (ex) {
+        console.log("connect fail.")
+        throw ex
+    }
+
+    try {
+        await client.add(dn, attrs)
+    }catch(ex) {
+        throw ex
+    }finally {
+        await client.unbind()
+    }
+}
+
+async function LdapEntryDel(dn) {
+    try {
+        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+    }catch (ex) {
+        console.log("connect fail.")
+        throw ex
+    }
+
+    try {
+        await client.del(dn)
+    }catch(ex) {
+        throw ex
+    }finally {
+        await client.unbind()
+    }
+}
+
+
+module.exports = {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel}

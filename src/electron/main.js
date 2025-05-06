@@ -42,6 +42,14 @@ function searchDn(event, dn) {
     return LdapSearchWithDn(dn)
 }
 
+function addEntry(event, dn, entry) {
+    return LdapEntryAdd(dn,entry)
+}
+
+function delEntry(event, dn) {
+    return LdapEntryDel(dn)
+}
+
 
 app.whenReady().then( () => {
     ipcMain.handle("ldap:all", searchAll)
@@ -49,6 +57,10 @@ app.whenReady().then( () => {
     ipcMain.handle("ldap:objectclass", searchObjectClass)
 
     ipcMain.handle("ldap:dn", searchDn)
+
+    ipcMain.handle("ldap:addEntry", addEntry)
+
+    ipcMain.handle("ldap:delEntry", delEntry)
 
     createWindow()
 

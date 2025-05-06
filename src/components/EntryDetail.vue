@@ -2,6 +2,12 @@
     <div class="main-content">
         <!-- <h2>{{ route.params.dn }}</h2> -->
         <el-card style="width:60%" shadow="hover">
+            <el-button type="primary" @click="entryAdd">
+                <el-icon><Plus/></el-icon>
+            </el-button>
+            <el-button type="primary" @click="deleteEntry">
+                <el-icon><Delete /></el-icon>
+            </el-button>
             <el-form label-width="auto" style="max-width: 35vw;">
                 <template v-for="item in Object.keys(dnObject)">
                     <div v-if="item === 'objectClass'" >
@@ -36,7 +42,7 @@
                             </el-collapse>
                         </el-form-item>
                     </div>
-                    <el-form-item v-if="!dnAttributes.includes(item) && item !=='objectClass'"  :label="item" class="display-input-label">
+                    <el-form-item v-if="!dnAttributes.includes(item) && item !=='objectClass'" :label="item" class="display-input-label">
                         <el-input
                             type="string"
                             :readonly="true"
@@ -51,12 +57,13 @@
     </div>
 </template>
 <script setup name="Detail">
-import { useRoute } from 'vue-router'
+import { useRoute,useRouter } from 'vue-router'
 import useLdap from '@/pages/api/useLdap'
 import { onMounted, reactive, readonly, watch } from 'vue'
 import {useObjectAttributes} from '@/store/ldapobjects'
 
 const route = useRoute()
+const router = useRouter()
 const {searchDn} = useLdap()
 const attributeStore = useObjectAttributes()
 const dnObject = reactive({})
@@ -79,6 +86,14 @@ watch(
         }
     }
 )
+
+function entryAdd(){
+    router.push({name:"entryadd", query:{dn: route.params.dn}})
+}
+
+function deleteEntry(){
+    console.log("delete entry...",route.params.dn)
+}
 
 function cleanDnObject(obj) {
     if(Array.isArray(obj)){
