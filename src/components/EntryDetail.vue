@@ -67,6 +67,8 @@ watch(
     () => route.params.dn,
     async (newDn, oldDn) => {
         if (newDn !== oldDn) {
+            // clean the result every time
+            cleanDnObject(dnObject)
             const obj = await searchDn(route.params.dn)
             if (obj) {
                 Object.assign(dnObject, obj[0])
@@ -78,8 +80,15 @@ watch(
     }
 )
 
+function cleanDnObject(obj) {
+    if(Array.isArray(obj)){
+        obj.splice(0, obj.length)
+    }else{
+        Object.keys(obj).forEach(k => {delete obj[k]})
+    }
+}
+
 function append(clz) {
-    console.log("appending object : ", clz)
     const attrObj = attributeStore.attributes
     if( attrObj[clz]?.MAY){
         dnAttributes.push(...attrObj[clz].MAY)
@@ -101,8 +110,7 @@ function getObjectClassAsArray(objclass){
 }
 
 function getAllDnAttributes() {
-    dnAttributes.splice(0, dnAttributes.length)
-    console.log("dnObject[objectClass]", dnObject["objectClass"])
+    cleanDnObject(dnAttributes)
     if(Array.isArray(dnObject["objectClass"])){
         for (const clz of dnObject["objectClass"]) {
             append(clz)
@@ -110,8 +118,6 @@ function getAllDnAttributes() {
     }else{
         append(dnObject["objectClass"])
     }
-    //dnAttributes.splice(0,1,"dn") 
-    console.log("dnAttributes == ", dnAttributes)
 }
 
 
@@ -121,7 +127,6 @@ onMounted( async () => {
     console.log("onMounted obj = ", obj)
     if (obj) {
         Object.assign(dnObject, obj[0])
-        console.log(Object.keys(dnObject))
         await attributeStore.fetchAttribute()
         getAllDnAttributes()
     }
