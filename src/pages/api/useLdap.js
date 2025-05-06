@@ -8,7 +8,7 @@ const useLdap = () => {
 
     const objectClasses = async ()=>{
         const res = await window.EAPI.objectClasses()
-        //console.log("render objectClasses:", res)
+        console.log("render objectClasses:", res)
         return res
     }
     const searchDn = async (dn) => {
