@@ -15,8 +15,9 @@ contextBridge.exposeInMainWorld("EAPI", {
         const res = ipcRenderer.invoke("ldap:dn", dn)
         return res
     },
-    addEntry: (dn) => {
-        const res = ipcRenderer.invoke("ldap:addEntry", dn)
+    addEntry: (dn, attribute) => {
+        console.log("preload addEntry : ", attribute)
+        const res = ipcRenderer.invoke("ldap:addEntry", dn,attribute)
         return res
     },
     delEntry: (dn) => {

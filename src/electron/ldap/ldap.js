@@ -55,7 +55,7 @@ async function LdapSearchWithDn(dn) {
         // })
         return searchEntries
     }catch(ex) {
-        console.log("search error: ",ex)
+        console.log("search error: ",dn, ex)
         return null
     }finally{
         await client.unbind()

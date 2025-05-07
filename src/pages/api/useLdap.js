@@ -17,6 +17,15 @@ const useLdap = () => {
         return res
     }
 
+    const addEntry = async(dn, res) => {
+        console.log("addEntry useLdap: ", res)
+        await window.EAPI.addEntry(dn, res)
+    }
+
+    const delEntry = async (dn) => {
+        await window.EAPI.delEntry(dn)
+    }
+
     const getObjectAttribute = (objectClasses) => {
         // 正则表达式匹配 MUST 和 MAY 属性
         const attributeRegex =  /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\) ]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
@@ -48,7 +57,7 @@ const useLdap = () => {
     }
 
     return  {
-        searchAll, objectClasses, searchDn,getObjectAttribute
+        searchAll, objectClasses, searchDn,getObjectAttribute,addEntry,delEntry
     }
 }
 

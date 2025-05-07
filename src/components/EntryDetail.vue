@@ -26,6 +26,7 @@
                                             />
                                         </div>
                                     </div>
+                                    <el-divider content-position="center">Optional</el-divider>
                                     <div v-for="objclassAttr in attributeStore.attributes[objclass]?.MAY">
                                         <div>
                                             <span>{{objclassAttr}}</span>

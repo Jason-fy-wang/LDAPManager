@@ -1,5 +1,5 @@
 const {app, BrowserWindow, Menu, ipcMain} = require('electron')
-const {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass} = require("./ldap/ldap")
+const {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel} = require("./ldap/ldap")
 const path = require("node:path")
 
 try {
@@ -43,6 +43,7 @@ function searchDn(event, dn) {
 }
 
 function addEntry(event, dn, entry) {
+    console.log("main add entry: ", entry, typeof(entry))
     return LdapEntryAdd(dn,entry)
 }
 
