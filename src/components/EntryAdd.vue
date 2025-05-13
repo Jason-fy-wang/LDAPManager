@@ -71,7 +71,7 @@ const route = useRoute()
 const router = useRouter()
 const objects = reactive([])
 const attributeStore = useObjectAttributes()
-const {addEntry, delEntry} = useLdap()
+const {addEntry} = useLdap()
 
 const formval = reactive({
     objectClass: [],

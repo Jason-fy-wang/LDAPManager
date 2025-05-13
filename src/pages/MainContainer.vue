@@ -23,7 +23,7 @@
         </el-header>
         <el-main class="display-content">
           <RouterView v-slot="{Component}">
-            <component :is="Component" @created="entryCreated" />
+            <component :is="Component" @created="entryCreated" @delete="entryDelete"/>
             </RouterView>
         </el-main>
       </el-container>
@@ -36,7 +36,9 @@ import useLdap from './api/useLdap'
 import {ref, onMounted, reactive, computed} from 'vue'
 import { useRouter } from 'vue-router'
 import ldapimage from '@/assets/ldap.png'
-const {searchAll, objectClasses} = useLdap()
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const {searchAll, objectClasses, delEntry} = useLdap()
 
 const router = useRouter()
 const defaultProps = {
@@ -56,23 +58,18 @@ function renderTreeNode (h, {node, data}) {
 
 function nodeClick(data) {
   const dn = getFullDn(treeData.value, data.label)
-  console.log(dn)
   router.push({name: "detail", params: {dn}})
 }
 
 function getFullDn(data, targetLabel){
     let path = []
-
     function search(nodes, curpath) {
         for (let node of nodes) {
-
             const newpath = [...curpath, node.label]
-
             if (node.label === targetLabel) {
                 path = newpath
                 return path
             }
-
             if (node.children && node.children.length > 0) {
                 if(search(node.children,  newpath)){
                     return true
@@ -80,17 +77,46 @@ function getFullDn(data, targetLabel){
             }
         }
     }
-
     search(data, [])
-
     return path.length >0 ? path.reverse().join(","):null
-
 }
 
 function entryCreated(dn, entry) {
   console.log("entry created: ", dn, entry)
   reloadAllAccount()
 }
+
+function entryDelete(entry) {
+  const childNode = getChildNode(entry.dn, treeData.value)
+  if (childNode && childNode.length > 0) {
+    ElMessage({
+      type: 'error',
+      message: 'Delete failed, please delete child node first!'
+    })
+  }else{
+    ElMessageBox.confirm('Are you sure to delete this entry?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      }).then(() => {
+        console.log("delete entry: ", entry.dn)
+        delEntry(entry.dn).then(() => {
+          ElMessage({
+            type: 'success',
+            message: 'Delete success!'
+          })
+          reloadAllAccount()
+        })
+      }).catch((e) => {
+        console.log("delete cancel: ", e)
+        ElMessage({
+          type: 'info',
+          message: 'Delete canceled'
+        })
+      })
+  }
+}
+
 let allAccount = ref([])
 
 function reloadAllAccount() {
@@ -111,6 +137,23 @@ onMounted( async () => {
   
 );
 
+// get dn correcponding child node 
+function getChildNode(dn, treeData) {
+  const firstLevel = dn.split(",")[0]
+  
+  for (const element of treeData) {
+    if (element.label === firstLevel) {
+      return element.children
+    }
+    if (element.children && element.children.length > 0) {
+      const child = getChildNode(dn, element.children)
+      if (child) {
+        return child
+      }
+    }
+  }
+}
+
 const treeData = computed(() => {
      let data = {}
      var current  = data
@@ -127,7 +170,7 @@ const treeData = computed(() => {
         })
         current = data
     })
-    //console.log("data = ", data)
+    console.log("data = ", data)
     let tree = []
     buildDn(data, tree)
     return tree

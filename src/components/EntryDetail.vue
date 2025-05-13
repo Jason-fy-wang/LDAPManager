@@ -63,6 +63,8 @@ import useLdap from '@/pages/api/useLdap'
 import { onMounted, reactive, readonly, watch } from 'vue'
 import {useObjectAttributes} from '@/store/ldapobjects'
 
+const emit = defineEmits(['delete'])
+
 const route = useRoute()
 const router = useRouter()
 const {searchDn} = useLdap()
@@ -94,6 +96,7 @@ function entryAdd(){
 
 function deleteEntry(){
     console.log("delete entry...",route.params.dn)
+    emit('delete', {dn: route.params.dn})
 }
 
 function cleanDnObject(obj) {
