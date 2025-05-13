@@ -1,5 +1,5 @@
 const {app, BrowserWindow, Menu, ipcMain} = require('electron')
-const {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel} = require("./ldap/ldap")
+const {IsLogin,LoginLdap,LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel} = require("./ldap/ldap")
 const path = require("node:path")
 
 try {
@@ -51,6 +51,13 @@ function delEntry(event, dn) {
     return LdapEntryDel(dn)
 }
 
+function login(event, host,port,user, passwd) {
+    return LoginLdap(host,port,user, passwd)
+}
+
+function isLogin() {
+    return IsLogin()
+}
 
 app.whenReady().then( () => {
     ipcMain.handle("ldap:all", searchAll)
@@ -62,6 +69,10 @@ app.whenReady().then( () => {
     ipcMain.handle("ldap:addEntry", addEntry)
 
     ipcMain.handle("ldap:delEntry", delEntry)
+
+    ipcMain.handle("ldap:login", login)
+
+    ipcMain.handle("ldap:checklogin", isLogin)
 
     createWindow()
 

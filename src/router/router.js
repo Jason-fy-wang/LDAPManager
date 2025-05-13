@@ -4,7 +4,10 @@ import { createRouter, createWebHistory } from "vue-router"
 import Home from '@/components/Home.vue'
 import Detail from '@/components/EntryDetail.vue'
 import Entryadd from '@/components/EntryAdd.vue'
+import Login from '@/components/Login.vue'
+import useLdap from "@/pages/api/useLdap"
 
+const { isLogin } = useLdap()
 const routers = createRouter({
     history: createWebHistory(),
     routes: [
@@ -15,8 +18,7 @@ const routers = createRouter({
         },
         {
             path: "/",
-            redirect: "/home"
-
+            redirect: "/login"
         },
         {
             name: "detail",
@@ -27,10 +29,28 @@ const routers = createRouter({
             name: "entryadd",
             path: "/entry/add",
             component: Entryadd
+        },
+        {
+            name: "login",
+            path: "/login",
+            component: Login
         }
     ]
 })
 
+routers.beforeEach(async (to, from, next) => {
+    const loginStatus = await isLogin()
+    console.log("beforeEach: ", to, from,loginStatus)
+    // not login
+    if (to.name !== "login" && !loginStatus) {
+        next({ name: "login" })
+        // already login
+    }else if (to.name === "login" && loginStatus) {
+        next({ name: "home" })
+    }else{
+        next()
+    }
+})
 
 export default routers
 

@@ -1,14 +1,46 @@
 const { Client } = require("ldapts")
 
-const client = new Client({
-    url: "ldap://192.168.20.10",
-    timeout: 0
-})
+// const client = new Client({
+//     url: "ldap://192.168.20.10",
+//     timeout: 0
+// })
+
+var client
+var user
+var pwd
+var login = false
+async function LoginLdap(host, port, usr, passwd) {
+    try {
+        console.log("LoginLdap: ", host, port, usr, passwd);
+        if (client) {
+            await client.unbind(); // Unbind the existing client if already initialized
+        }
+        client = new Client({
+            url: "ldap://" + host + ":" + port,
+            timeout: 0
+        });
+        await client.bind(usr,passwd)
+        console.log("login success")
+        user = usr
+        pwd = passwd
+        login = true
+    }catch(ex) {
+        console.log("login fail.", ex)
+    }finally {
+        if (client) {
+            await client.unbind()
+        }
+    }
+    return login
+}
+
+function IsLogin(){
+    return login
+}
 
 async function LdapSearchAll() {
     try {
-        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
-        console.log("connect success")
+        await client.bind(user,pwd)
     }catch(ex) {
         console.log("connect fail.")
         throw ex
@@ -38,7 +70,7 @@ async function LdapSearchAll() {
 
 async function LdapSearchWithDn(dn) {
     try {
-        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+        await client.bind(user,pwd)
         console.log("connect success")
     }catch(ex) {
         console.log("connect fail.")
@@ -64,7 +96,7 @@ async function LdapSearchWithDn(dn) {
 
 async function LdapSearchObjectclass() {
     try {
-        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+        await client.bind(user,pwd)
     }catch (ex) {
         console.log("connect fail.")
         throw ex
@@ -90,7 +122,7 @@ async function LdapSearchObjectclass() {
 
 async function LdapEntryAdd(dn, attrs) {
     try {
-        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+        await client.bind(user,pwd)
     }catch (ex) {
         console.log("connect fail.")
         throw ex
@@ -107,7 +139,7 @@ async function LdapEntryAdd(dn, attrs) {
 
 async function LdapEntryDel(dn) {
     try {
-        await client.bind("cn=admin,dc=example,dc=com",process.env.passwd)
+        await client.bind(user,pwd)
     }catch (ex) {
         console.log("connect fail.")
         throw ex
@@ -123,4 +155,4 @@ async function LdapEntryDel(dn) {
 }
 
 
-module.exports = {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel}
+module.exports = {LdapSearchAll, LdapSearchWithDn,LdapSearchObjectclass,LdapEntryAdd,LdapEntryDel,LoginLdap, IsLogin}

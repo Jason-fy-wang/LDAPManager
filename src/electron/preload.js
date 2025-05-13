@@ -23,5 +23,13 @@ contextBridge.exposeInMainWorld("EAPI", {
     delEntry: (dn) => {
         const res = ipcRenderer.invoke("ldap:delEntry", dn)
         return res
-    }
+    },
+    login: (host, port, user, passwd) => {
+        const res = ipcRenderer.invoke("ldap:login", host, port, user, passwd)
+        return res
+    },
+    isLogin: () => {
+        const res = ipcRenderer.invoke("ldap:checklogin")
+        return res
+    },
 })

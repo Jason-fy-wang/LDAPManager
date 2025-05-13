@@ -23,7 +23,7 @@
         </el-header>
         <el-main class="display-content">
           <RouterView v-slot="{Component}">
-            <component :is="Component" @created="entryCreated" @delete="entryDelete"/>
+            <component :is="Component" @created="entryCreated" @delete="entryDelete" @login="handleLogin"/>
             </RouterView>
         </el-main>
       </el-container>
@@ -125,17 +125,24 @@ function reloadAllAccount() {
   })
 }
 
-onMounted( async () => {
-    allAccount.value = await searchAll()
-    //console.log(allAccount)
-    const res = await objectClasses()  
-    console.log("object class:", res)
+async function handleLogin() {
+   allAccount.value = await searchAll()
+    //const res = await objectClasses()  
+    //console.log("object class:", res)
 
-    //const dn = await searchDn("uid=john,ou=person,dc=example,dc=com")
-    //console.log("dn : ", dn)
-  }
+}
+
+// onMounted( async () => {
+//     allAccount.value = await searchAll()
+//     //console.log(allAccount)
+//     const res = await objectClasses()  
+//     console.log("object class:", res)
+
+//     //const dn = await searchDn("uid=john,ou=person,dc=example,dc=com")
+//     //console.log("dn : ", dn)
+//   }
   
-);
+// );
 
 // get dn correcponding child node 
 function getChildNode(dn, treeData) {

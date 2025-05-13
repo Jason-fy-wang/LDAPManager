@@ -26,6 +26,14 @@ const useLdap = () => {
         await window.EAPI.delEntry(dn)
     }
 
+    const login = async (host, port, user, passwd) => {
+        return await window.EAPI.login(host, port, user, passwd)
+    }
+
+    const isLogin = async() => {
+        return await window.EAPI.isLogin()
+    }
+
     const getObjectAttribute = (objectClasses) => {
         // 正则表达式匹配 MUST 和 MAY 属性
         // objectClasses: ( 2.16.840.1.113730.3.2.6 NAME 'referral' DESC 'namedref: named
@@ -86,7 +94,7 @@ const useLdap = () => {
     }
 
     return  {
-        searchAll, objectClasses, searchDn,getObjectAttribute,addEntry,delEntry
+        searchAll, objectClasses, searchDn,getObjectAttribute,addEntry,delEntry,login,isLogin
     }
 }
 

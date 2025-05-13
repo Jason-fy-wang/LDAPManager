@@ -155,7 +155,7 @@ onMounted( async () => {
 </script>
 
 
-<style lang="less">
+<style lang="less" scoped>
     .main-content{
         .display-input-label {
             .el-input__wrapper{
