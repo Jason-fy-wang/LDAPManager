@@ -9,6 +9,7 @@
       <el-tree 
         :data="treeData"
         :props="defaultProps"
+        default-expand-all
         highlight-current
         @node-click="nodeClick"
         :render-content="renderTreeNode"
@@ -21,7 +22,9 @@
             <h2>Ldapmanager</h2>
         </el-header>
         <el-main class="display-content">
-          <RouterView/>
+          <RouterView v-slot="{Component}">
+            <component :is="Component" @created="entryCreated" />
+            </RouterView>
         </el-main>
       </el-container>
     </el-container>
@@ -33,6 +36,7 @@ import useLdap from './api/useLdap'
 import {ref, onMounted, reactive, computed} from 'vue'
 import { useRouter } from 'vue-router'
 import ldapimage from '@/assets/ldap.png'
+const {searchAll, objectClasses} = useLdap()
 
 const router = useRouter()
 const defaultProps = {
@@ -83,10 +87,19 @@ function getFullDn(data, targetLabel){
 
 }
 
+function entryCreated(dn, entry) {
+  console.log("entry created: ", dn, entry)
+  reloadAllAccount()
+}
 let allAccount = ref([])
 
+function reloadAllAccount() {
+  searchAll().then(res => {
+    allAccount.value = res
+  })
+}
+
 onMounted( async () => {
-    const {searchAll, objectClasses} = useLdap()
     allAccount.value = await searchAll()
     //console.log(allAccount)
     const res = await objectClasses()  

@@ -9,6 +9,17 @@
                     :value="route.query.dn"
                 />
             </el-form-item>
+            <el-form-item label="dn">
+                <div>
+                    <el-select placeholder="attribute" v-model="formval.attr">
+                        <el-option v-for="item in getAllMustAttributes()" :label="item" :value="item" />
+                    </el-select>
+                    <el-input
+                    type="string"
+                    @blur="onInputBlur()"
+                    v-model="formval.attrval"/>
+                </div>
+            </el-form-item>
             <el-form-item v-for="obj in objects" label="objectclass">
                 <el-collapse accordion>
                         <el-collapse-item :title="obj" :name="obj">
@@ -53,6 +64,8 @@ import { useObjectAttributes } from '@/store/ldapobjects'
 import { ElMessage,ElMessageBox } from 'element-plus'
 import useLdap from '@/pages/api/useLdap'
 
+// define event to send
+const emit = defineEmits(['created'])
 
 const route = useRoute()
 const router = useRouter()
@@ -62,21 +75,55 @@ const {addEntry, delEntry} = useLdap()
 
 const formval = reactive({
     objectClass: [],
+    attr: '',
+    attrval: '',
 })
 const tempobjclass = ref('')
 
 function handCreate(){
-    const dn = route.query.dn
+    var dn = route.query.dn
+    const attr = formval['attr']
+    const attrval = formval['attrval']
     delete formval['dn']
+    delete formval['attr']
+    delete formval['attrval']
+    dn = attr + '=' + attrval + ',' +dn
     console.log("form value: ", formval, dn, JSON.stringify(formval))
-    addEntry("ou=HR,dc=example,dc=com", {
-        objectClass: ["organizationalUnit"],
-        ou: "HR"
+    console.log("dn: ", {...Object.fromEntries(Object.entries(formval)), objectClass: Array.from(formval.objectClass), [attr]: attrval})
+    // [attr]: attrval,   // use attr'value as key
+    const entry = {
+        ...Object.fromEntries(Object.entries(formval)),
+        objectClass: formval.objectClass.slice(),   // overwrite objectClass
+    }
+    addEntry(dn, entry).then(() => {
+        emit('created', {dn, entry})
     })
 }
 
 function allObjectClass() {
-    return Object.keys(attributeStore.attributes)
+    if (objects.length > 0){
+        return attributeStore.attributes['auxiliaries']
+    }else{
+        return attributeStore.attributes['structuals']
+    }
+}
+
+// copy dn to formval
+function onInputBlur(){
+    console.log("onInputBlur", formval.attr, formval.attrval)
+    if (formval.attr !== '' && formval.attrval !== ''){
+        formval[formval.attr] = formval.attrval
+    }
+}
+
+function getAllMustAttributes() {
+    const must = []
+    for (const obj of objects){
+        if (attributeStore.attributes[obj]?.MUST){
+            must.push(...attributeStore.attributes[obj].MUST)
+        }
+    }
+    return must
 }
 
 function addObjectClass(){
