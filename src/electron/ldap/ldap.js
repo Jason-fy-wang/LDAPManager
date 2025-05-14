@@ -11,7 +11,7 @@ var pwd
 var login = false
 async function LoginLdap(host, port, usr, passwd) {
     try {
-        console.log("LoginLdap: ", host, port, usr, passwd);
+        //console.log("LoginLdap: ", host, port, usr, passwd);
         if (client) {
             await client.unbind(); // Unbind the existing client if already initialized
         }
@@ -53,13 +53,10 @@ async function LdapSearchAll() {
             //scope: "base"
             //scope: "children"
         })
-        // searchEntries.forEach((entry) => {
-        //     console.log(entry)
+        // console.log("************************************************")
+        // searchReferences.forEach((str) => {
+        //     console.log("refer: ", str)
         // })
-        console.log("************************************************")
-        searchReferences.forEach((str) => {
-            console.log("refer: ", str)
-        })
         return  searchEntries
     }catch(ex) {
         console.log("search failed. ",ex)
@@ -82,9 +79,6 @@ async function LdapSearchWithDn(dn) {
             scope: "base"
         })
         
-        // searchEntries.forEach((entry) => {
-        //     console.log(entry)
-        // })
         return searchEntries
     }catch(ex) {
         console.log("search error: ",dn, ex)
@@ -109,9 +103,6 @@ async function LdapSearchObjectclass() {
             attributes: ["objectClasses"]
         })
 
-        // searchEntries.forEach(element => {
-        //     console.log(element)
-        // });
         return searchEntries
     }catch(ex) {
         throw ex

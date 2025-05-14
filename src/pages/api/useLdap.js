@@ -39,6 +39,7 @@ const useLdap = () => {
         // objectClasses: ( 2.16.840.1.113730.3.2.6 NAME 'referral' DESC 'namedref: named
         //    subordinate referral' SUP top STRUCTURAL MUST ref )
         const attributeRegex =  /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\) ]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
+        const parentSubtract = /SUP\s*\(?\s*([a-zA-Z]+\s*([$]+\s*[a-zA-Z]+\s*)*)\)?\s+/g
         const attributes = {}
         const structuals = []
         const abstracts = []
@@ -56,7 +57,6 @@ const useLdap = () => {
         if (objectClasses["objectClasses"]){
             objectClasses["objectClasses"].forEach(objectClass => {
                 let match, NAME
-                
                 while ((match = attributeRegex.exec(objectClass)) !== null) {
                     if (match[0].startsWith('NAME')) {
                         if (match[1] && match[2] && match[3]) {
@@ -66,6 +66,8 @@ const useLdap = () => {
                         }
                         attributes[NAME] = {}
                     }
+                    
+
                     if (structualsRegex.test(objectClass)) {
                         appendValue(structuals, NAME)
                     }else if (abstractsRegex.test(objectClass)) {
@@ -84,12 +86,20 @@ const useLdap = () => {
                         attributes[NAME]["MAY"] = match[5].trim().split(/\s*\$\s*/);   // 用 $ 分割 MAY 属性
                     }
                 }
+                // SUP 属性
+                while ((match = parentSubtract.exec(objectClass)) !== null) {
+                    //console.log("parentSubtract: ", objectClass, " is 0: ",match[0], " is1 :", match[1], " is2: ")
+                    if (match[1]) {
+                        let parents = match[1].trim().split(/\s*\$\s*/)
+                        attributes[NAME]["SUP"] = parents
+                    }
+                }
             })
         }
         attributes["structuals"] = structuals
         attributes["abstracts"] = abstracts
         attributes["auxiliaries"] = auxiliaries
-        //console.log("attributes: ", attributes)
+        console.log("attributes: ", attributes)
         return attributes
     }
 

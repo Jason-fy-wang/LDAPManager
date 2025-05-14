@@ -40,7 +40,7 @@ const routers = createRouter({
 
 routers.beforeEach(async (to, from, next) => {
     const loginStatus = await isLogin()
-    console.log("beforeEach: ", to, from,loginStatus)
+    //console.log("beforeEach: ", to, from,loginStatus)
     // not login
     if (to.name !== "login" && !loginStatus) {
         next({ name: "login" })

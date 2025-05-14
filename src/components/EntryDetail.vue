@@ -84,7 +84,7 @@ watch(
                 Object.assign(dnObject, obj[0])
                 await attributeStore.fetchAttribute()
                 getAllDnAttributes()
-                console.log(" dnObject = ", dnObject)
+                //console.log(" dnObject = ", dnObject)
             }
         }
     }
@@ -143,7 +143,6 @@ function getAllDnAttributes() {
 onMounted( async () => {
     const {searchDn} = useLdap()
     const obj = await searchDn(route.params.dn)
-    console.log("onMounted obj = ", obj)
     if (obj) {
         Object.assign(dnObject, obj[0])
         await attributeStore.fetchAttribute()

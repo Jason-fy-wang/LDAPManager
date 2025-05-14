@@ -31,7 +31,7 @@ function testAttribute() {
     console.log(`ObjectClass Attributes:`, attributes);
 }
 
-testAttribute()
+//testAttribute()
 
 function testAttribute2() {
      // 正则表达式匹配 MUST 和 MAY 属性
@@ -51,6 +51,53 @@ function testAttribute2() {
         console.log("5", match[5])
         console.log("==============================================================")
     }
-   
 }
-// testAttribute2()
+//testAttribute2()
+
+
+function testGetParentObject(){
+    console.log("====================get Parent object==========================================")
+    const str4 = "objectClasses: ( 1.3.6.1.4.1.4203.1.4.5 NAME 'OpenLDAPperson' DESC 'OpenLDAP Person' SUP ( pilotPerson $ inetOrgPerson ) STRUCTURAL MUST ( uid $ cn ) MAY ( givenName $ labeledURI $ o ) )"
+    const str41 = "objectClasses: ( 1.3.6.1.4.1.4203.1.4.5 NAME 'OpenLDAPperson' DESC 'OpenLDAP Person' SUP ( pilotPersonn $ inetOrgPersonn $ inetOrgPersonn ) STRUCTURAL MUST ( uid $ cn ) MAY ( givenName $ labeledURI $ o ) )"
+    const str5 = "objectClasses: ( 1.3.6.1.4.1.4203.1.4.5 NAME 'OpenLDAPperson' DESC 'OpenLDAP Person' SUP pilotPerson STRUCTURAL MUST ( uid $ cn ) MAY ( givenName $ labeledURI $ o ) )"
+    const parentSubtract = /SUP\s*\(?\s*([a-zA-Z]+\s*([$]+\s*[a-zA-Z]+\s*)*)\)?\s+/g
+    while((match = parentSubtract.exec(str4)) !== null) {
+        console.log("parent: ", match[1])
+        console.log("0", match[0])
+        console.log("1", match[1])
+        console.log("2", match[2])
+        console.log("==============================================================")
+    }
+
+    while((match = parentSubtract.exec(str41)) !== null) {
+        console.log("parent3: ", match[1])
+        console.log("0", match[0])
+        console.log("1", match[1])
+        console.log("2", match[2])
+        console.log("==============================================================")
+    }
+
+    while((match = parentSubtract.exec(str5)) !== null) {
+        console.log("parent2: ", match[1])
+        console.log("0", match[0])
+        console.log("1", match[1])
+        console.log("==============================================================")
+    }
+
+    const str6 = "objectClasses: ( 2.5.6.1 NAME 'alias' DESC 'RFC4512: an alias' SUP top STRUCTURAL MUST aliasedObjectName )"
+    while((match = parentSubtract.exec(str6)) !== null) {
+        console.log("parent4: ", match[1])
+        console.log("0", match[0])
+        console.log("1", match[1])
+        console.log("==============================================================")
+    }
+
+    if ((match = parentSubtract.exec(str41)) !== null) {
+        console.log("parent5: ", match[1])
+        console.log("0", match[0])
+        console.log("1", match[1])
+        console.log("2", match[2])
+        console.log("==============================================================")
+    }
+}
+testGetParentObject()

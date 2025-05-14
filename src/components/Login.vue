@@ -1,7 +1,7 @@
 <template>
     <div class="login-page">
         <el-card style="width:300px;margin:100px auto;">
-            <el-form @submit.prevent="handleLogin">
+            <el-form @submit.prevent="handleLogin" class="login-form" label-width="80px">
                 <el-form-item label="Username">
                     <el-input v-model="username" autocomplete="off" />
                 </el-form-item>

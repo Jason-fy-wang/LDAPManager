@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-container class="main-container">
-      <el-aside class="main-side">
+      <el-aside class="main-side" v-show="isLogin">
         <div class="left-side-image">
           <el-image :src="ldapimage"/>
         </div>
@@ -18,7 +18,7 @@
       </el-tree>
       </el-aside>
       <el-container class="main-content">
-        <el-header class="main-header">
+        <el-header class="main-header" v-show="isLogin">
             <h2>Ldapmanager</h2>
         </el-header>
         <el-main class="display-content">
@@ -39,6 +39,9 @@ import ldapimage from '@/assets/ldap.png'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const {searchAll, objectClasses, delEntry} = useLdap()
+
+let allAccount = ref([])
+let isLogin = ref(false)
 
 const router = useRouter()
 const defaultProps = {
@@ -117,7 +120,6 @@ function entryDelete(entry) {
   }
 }
 
-let allAccount = ref([])
 
 function reloadAllAccount() {
   searchAll().then(res => {
@@ -126,7 +128,8 @@ function reloadAllAccount() {
 }
 
 async function handleLogin() {
-   allAccount.value = await searchAll()
+  isLogin.value = true
+  allAccount.value = await searchAll()
     //const res = await objectClasses()  
     //console.log("object class:", res)
 
@@ -177,7 +180,6 @@ const treeData = computed(() => {
         })
         current = data
     })
-    console.log("data = ", data)
     let tree = []
     buildDn(data, tree)
     return tree
