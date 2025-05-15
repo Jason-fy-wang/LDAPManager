@@ -19,7 +19,14 @@ const useLdap = () => {
 
     const addEntry = async(dn, res) => {
         console.log("addEntry useLdap: ", res)
-        await window.EAPI.addEntry(dn, res)
+        try {
+            const result = await window.EAPI.addEntry(dn, res)
+            console.log("addEntry res: ", result)
+            return result
+        } catch (e) {
+            Console.log("addEntry error: ", e)
+            return { success: false, error: e } // Return the exception value
+        }
     }
 
     const delEntry = async (dn) => {
@@ -38,7 +45,7 @@ const useLdap = () => {
         // 正则表达式匹配 MUST 和 MAY 属性
         // objectClasses: ( 2.16.840.1.113730.3.2.6 NAME 'referral' DESC 'namedref: named
         //    subordinate referral' SUP top STRUCTURAL MUST ref )
-        const attributeRegex =  /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\) ]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
+        const attributeRegex =  /NAME\s+\(?\s*('([a-zA-Z-0-9]+)'\s*)+\s*\)?\s*|MUST\s+\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?|MAY\s*\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?/g
         const parentSubtract = /SUP\s*\(?\s*([a-zA-Z]+\s*([$]+\s*[a-zA-Z]+\s*)*)\)?\s+/g
         const attributes = {}
         const structuals = []
@@ -48,42 +55,48 @@ const useLdap = () => {
         const structualsRegex = /STRUCTURAL/g
         const abstractsRegex = /ABSTRACT/g
         //console.log("objectClasses: ", objectClasses)
-        const appendValue = (obj, value) => {
-            if (obj.indexOf(value)<0){
-                obj.push(value)
-            }
+        const appendValue = (obj, names) => {
+            names.forEach(name => {
+                if (obj.indexOf(name)<0){
+                    obj.push(name)
+                }
+            })
         }
 
         if (objectClasses["objectClasses"]){
             objectClasses["objectClasses"].forEach(objectClass => {
-                let match, NAME
+                let match, names
                 while ((match = attributeRegex.exec(objectClass)) !== null) {
                     if (match[0].startsWith('NAME')) {
-                        if (match[1] && match[2] && match[3]) {
-                            NAME = match[1].trim()+" "+match[3].trim()
-                        }else {
-                            NAME = match[1].trim()
-                        }
-                        attributes[NAME] = {}
+                        // multiple names
+                        names = match[0]?.trim().replaceAll(/['()]/g, "").replaceAll("NAME","").split(/\s+/).filter(item => item.length>0)
+                        names.forEach(name => {
+                            attributes[name] = {}
+                        })
                     }
                     
 
                     if (structualsRegex.test(objectClass)) {
-                        appendValue(structuals, NAME)
+                        appendValue(structuals, names)
                     }else if (abstractsRegex.test(objectClass)) {
-                        appendValue(abstracts, NAME)
+                        appendValue(abstracts, names)
                     }else if (auxiliaryRegex.test(objectClass)) {
-                        appendValue(auxiliaries, NAME)
+                        appendValue(auxiliaries, names)
                     }
                     // match[4] MUST 属性
-                    if (match[4]) {
-                        //console.log("match(1): ", match[1])
-                        attributes[NAME]["MUST"] = match[4].trim().split(/\s*\$\s*/);  // 用 $ 分割 MUST 属性
+                    if (match[3]) {
+                        console.log("MUST match(1): ",names, match[0], match[4])
+                        names.forEach(name => {
+                            attributes[name]["MUST"] = {}
+                            attributes[name]["MUST"] = match[3].trim().split(/\s*\$\s*/);  // 用 $ 分割 MUST 属性
+                        })
                     }
                     // match[5] MAY 属性
                     if (match[5]) {
-                        attributes[NAME]["MAY"] = {}
-                        attributes[NAME]["MAY"] = match[5].trim().split(/\s*\$\s*/);   // 用 $ 分割 MAY 属性
+                        names.forEach(name => {
+                            attributes[name]["MAY"] = {}
+                            attributes[name]["MAY"] = match[5].trim().split(/\s*\$\s*/);   // 用 $ 分割 MAY 属性
+                        })
                     }
                 }
                 // SUP 属性
@@ -91,7 +104,9 @@ const useLdap = () => {
                     //console.log("parentSubtract: ", objectClass, " is 0: ",match[0], " is1 :", match[1], " is2: ")
                     if (match[1]) {
                         let parents = match[1].trim().split(/\s*\$\s*/)
-                        attributes[NAME]["SUP"] = parents
+                        names.forEach(name => {
+                            attributes[name]["SUP"] = parents
+                        })
                     }
                 }
             })

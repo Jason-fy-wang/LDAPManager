@@ -88,15 +88,22 @@ function handCreate(){
     delete formval['attr']
     delete formval['attrval']
     dn = attr + '=' + attrval + ',' +dn
-    console.log("form value: ", formval, dn, JSON.stringify(formval))
-    console.log("dn: ", {...Object.fromEntries(Object.entries(formval)), objectClass: Array.from(formval.objectClass), [attr]: attrval})
+    //console.log("form value: ", formval, dn, JSON.stringify(formval))
+    //console.log("dn: ", {...Object.fromEntries(Object.entries(formval)), objectClass: Array.from(formval.objectClass), [attr]: attrval})
     // [attr]: attrval,   // use attr'value as key
     const entry = {
         ...Object.fromEntries(Object.entries(formval)),
         objectClass: formval.objectClass.slice(),   // overwrite objectClass
     }
-    addEntry(dn, entry).then(() => {
-        emit('created', {dn, entry})
+
+    addEntry(dn, entry).then((res) => {
+        console.log('addEntry entry response:', res)
+        if(res.success){
+            ElMessage.success('Create entry success')
+            emit('created', {dn, entry})
+        }else{
+            ElMessage.error('Create entry failed '+ res.error)
+        }
     })
 }
 
@@ -121,6 +128,14 @@ function getAllMustAttributes() {
     for (const obj of objects){
         if (attributeStore.attributes[obj]?.MUST){
             must.push(...attributeStore.attributes[obj].MUST)
+        }
+        // get parent objectclass MUST attributes
+        if (attributeStore.attributes[obj]?.SUP){
+            for (const sup of attributeStore.attributes[obj].SUP){
+                if (attributeStore.attributes[sup]?.MUST){
+                    must.push(...attributeStore.attributes[sup].MUST)
+                }
+            }
         }
     }
     return must

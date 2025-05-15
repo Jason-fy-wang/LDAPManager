@@ -29,9 +29,9 @@ import { ElMessage } from 'element-plus'
 import useLdap from '@/pages/api/useLdap'
 
 const {login} = useLdap()
-const username = ref('')
+const username = ref('cn=admin,dc=example,dc=com')
 const password = ref('')
-const host = ref('')
+const host = ref('192.168.20.10')
 const port = ref('389')
 const router = useRouter()
 const emit = defineEmits(['login'])

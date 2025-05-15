@@ -115,14 +115,15 @@ async function LdapEntryAdd(dn, attrs) {
     try {
         await client.bind(user,pwd)
     }catch (ex) {
-        console.log("connect fail.")
-        throw ex
+        console.log("connect fail.", e)
     }
 
     try {
         await client.add(dn, attrs)
+        return {success: true}
     }catch(ex) {
-        throw ex
+        console.log("LdapEntryAdd error: ",dn, ex)
+        return {success: false, error: ex}        
     }finally {
         await client.unbind()
     }
@@ -132,8 +133,7 @@ async function LdapEntryDel(dn) {
     try {
         await client.bind(user,pwd)
     }catch (ex) {
-        console.log("connect fail.")
-        throw ex
+        console.log("connect fail.", ex)
     }
 
     try {

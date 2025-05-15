@@ -35,15 +35,26 @@ function testAttribute() {
 
 function testAttribute2() {
      // 正则表达式匹配 MUST 和 MAY 属性
-    const attributeRegex = /NAME\s+\(?\s*'([a-zA-Z-0-9]+)'\s*('([a-z'A-Z-0-9]+)')?\s*\)?\s*|MUST\s+\(?\s*([^\)]+)\s*\)?|MAY\s+\(?\s*([^\)]+)\s*\)?/g
-    const str = "( 1.3.6.1.4.1.4203.1.4.1 NAME ( 'OpenLDAProotDSE' 'LDAProotDSE' ) DESC 'OpenLDAP Root DSE object' SUP top STRUCTURAL MAY cn )"
+     /**
+      * /NAME\s+\(?\s*('([a-zA-Z-0-9]+)'\s*)+\s*\)?\s*  match[1] (外部group)  match[2](内部group)
+      * MUST\s+\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?|   match[3](外部group)  match[4](内部group)
+      * MAY\s*\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?/g   match[5](外部group)  match[6](内部group)
+      */
+    const attributeRegex = /NAME\s+\(?\s*('([a-zA-Z-0-9]+)'\s*)+\s*\)?\s*|MUST\s+\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?|MAY\s*\(?\s*([a-zA-Z0-9]+\s*([$]\s*[a-zA-Z0-9]+\s*)*)\s*\)?/g
+    const str = "( 1.3.6.1.4.1.4203.1.4.1 NAME ( 'OpenLDAProotDSE' 'LDAProotDSE' 'LDAProotDSEE') DESC 'OpenLDAP Root DSE object' SUP top STRUCTURAL MAY cn )"
     const str2= "( 2.5.6.16 NAME 'certificationAuthority' DESC 'RFC2256: a certificate authority' SUP top AUXILIARY MUST ( authorityRevocationList $ certificateRevocationList $ cACertificate ) MAY crossCertificatePair )"
     const str3= "( 0.9.2342.19200300.100.4.15 NAME 'dNSDomain' SUP domain STRUCTURAL MAY ( ARecord $ MDRecord $ MXRecord $ NSRecord $ SOARecord $ CNAMERecord ) )"
-    let match
+    const str5 = "( 1.3.6.1.4.1.1466.344 NAME 'dcObject' DESC 'RFC2247: domain component object' SUP top AUXILIARY MUST dc )"
+    
+    const str6 = "objectClasses: ( 2.5.6.5 NAME 'organizationalUnit' DESC 'RFC2256: an organizational unit' SUP top STRUCTURAL MUST ou MAY ( userPassword $ searchGuide $ seeAlso $ businessCategory $ x121Address $ registeredAddress $ destinationIndicator $ preferredDeliveryMethod $ telexNumber $ teletexTerminalIdentifier $ telephoneNumber $ internationaliSDNNumber $ facsimileTelephoneNumber $ street $ postOfficeBox $ postalCode $ postalAddress $ physicalDeliveryOfficeName $ st $ l $ description ) )"
 
-    while((match = attributeRegex.exec(str3)) !== null) {
-        console.log(match)
+    let match
+    while((match = attributeRegex.exec(str)) !== null) {
+        //console.log(match)
         console.log("0", match[0])
+        if(match[0].startsWith("NAME")) {
+            console.log("0", match[0]?.trim().replaceAll(/['()]/g, "").replaceAll("NAME","").split(/\s+/).filter(item => item.length>0))
+        }
         console.log("1", match[1])
         console.log("2", match[2])
         console.log("3", match[3])
@@ -51,8 +62,41 @@ function testAttribute2() {
         console.log("5", match[5])
         console.log("==============================================================")
     }
+
+    const str4 = "objectClasses: ( 2.5.6.6 NAME 'person' DESC 'RFC2256: a person' SUP top STRUCTURAL MUST ( sn $ cn ) MAY ( userPassword $ telephoneNumber $ seeAlso $ description ) )"
+    while((match = attributeRegex.exec(str4)) !== null) {
+        console.log("parent4: ", match[0])
+        console.log("0", match[0])
+        if(match[0].startsWith("NAME")) {
+        console.log("0", match[0]?.trim().replaceAll(/['()]/g, "").replaceAll("NAME","").split(/\s+/).filter(item => item.length>0))
+        }
+        console.log("1", match[1])
+        console.log("2", match[2])
+        console.log("3", match[3])
+        console.log("3", match[3]?.trim().split(/\s*\$\s*/))
+        console.log("4", match[4])
+        console.log("5", match[5]?.trim().split(/\s*\$\s*/))
+        console.log("==============================================================")
+    }
+    while((match = attributeRegex.exec(str6)) !== null) {
+        console.log("parent6: ", match[0])
+        console.log("0", match[0])
+        if(match[0].startsWith("NAME")) {
+            console.log("0", match[0]?.trim().replaceAll(/['()]/g, "").replaceAll("NAME","").split(/\s+/).filter(item => item.length>0))
+        }
+        console.log("1", match[1])
+        console.log("2", match[2])
+        console.log("3", match[3])
+        console.log("3", match[3]?.trim().split(/\s*\$\s*/))
+        console.log("4", match[4])
+        console.log("5", match[5])
+        console.log("5", match[5]?.trim().split(/\s*\$\s*/))
+        console.log("6", match[6])
+        console.log("7", match[7])
+        console.log("==============================================================")
+    }
 }
-//testAttribute2()
+testAttribute2()
 
 
 function testGetParentObject(){
@@ -100,4 +144,4 @@ function testGetParentObject(){
         console.log("==============================================================")
     }
 }
-testGetParentObject()
+//testGetParentObject()
