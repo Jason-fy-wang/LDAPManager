@@ -104,6 +104,9 @@ function handCreate(){
         }else{
             ElMessage.error('Create entry failed '+ res.error)
         }
+    }).catch((error) => {
+        console.log(error)
+        ElMessage.error('Create entry failed')
     })
 }
 
