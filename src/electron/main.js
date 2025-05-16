@@ -25,7 +25,9 @@ const createWindow = () => {
         win.loadURL("http://localhost:5173/")
         win.webContents.openDevTools()
     }else {
-        win.loadFile("./public/index.html")
+        // production 
+        const indexPath = path.join(process.resourcesPath,"app.asar","dist","index.html")
+        win.loadFile(indexPath)
     }
 }
 

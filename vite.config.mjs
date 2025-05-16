@@ -16,4 +16,5 @@ export default defineConfig({
     vue(),
     vueJsx()
   ],
+  base: "./",
 })

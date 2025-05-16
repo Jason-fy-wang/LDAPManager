@@ -2,15 +2,24 @@
   "name": "ldapmanage",
   "version": "0.1.0",
   "type": "commonjs",
+  "author": {
+    "name": "Jason",
+    "email": "kai.fy.wang@foxmail.com"
+  },
+  "description": "A simple LDAP management tool",
+  "license": "MIT",
   "private": true,
   "main": "src/electron/main.js",
   "scripts": {
+    "clean": "rimraf dist_electron && rimraf dist",
     "serve": "vite --port 5173",
-    "build": "vue-tsc && vite build",
     "lint": "vue-cli-service lint",
     "start": "concurrently -k \"npm run serve\"  \"npm run electron\"",
     "electron": "sleep 2s && cross-env NODE_ENV=dev electron .",
-    "electron_local": "cross-env NODE_ENV=dev electron ."
+    "electron_local": "cross-env NODE_ENV=dev electron .",
+    "build:renderer": "vite build",
+    "build:electron": "cross-env NODE_ENV=production electron-builder",
+    "build": "npm run clean && npm run build:renderer && npm run build:electron"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -21,6 +30,31 @@
     "pinia": "^3.0.2",
     "vue": "^3.2.13",
     "vue-router": "^4.4.5"
+  },
+  "build": {
+    "appId": "com.open.ldapmanage",
+    "productName": "LdapManage",
+    "files": [
+      "src/**/*",
+      "dist/**/*",
+      "public/**/*"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist_electron"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/favicon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -33,11 +67,13 @@
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "electron": "^35.2.1",
+    "electron-builder": "^26.0.12",
     "electron-reloader": "^1.2.3",
     "eslint": "^9.25.1",
     "eslint-plugin-vue": "^10.0.0",
     "less": "^4.2.0",
     "mocha": "^11.1.0",
+    "rimraf": "^6.0.1",
     "vite": "^6.3.3",
     "wait-on": "^8.0.1"
   },
