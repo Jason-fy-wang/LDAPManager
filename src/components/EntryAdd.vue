@@ -10,8 +10,8 @@
                 />
             </el-form-item>
             <el-form-item label="dn">
-                <div>
-                    <el-select placeholder="attribute" v-model="formval.attr">
+                <div class="class-for-dn">
+                    <el-select class="class-for-dn-select" placeholder="attribute" v-model="formval.attr">
                         <el-option v-for="item in getAllMustAttributes()" :label="item" :value="item" />
                     </el-select>
                     <el-input
@@ -46,13 +46,15 @@
             </el-form-item>
 
             <el-form-item label="objectclass">
-                <el-select placeholder="objectclass" v-model="tempobjclass">
+                <el-select @change="objectClassChange" placeholder="objectclass" v-model="tempobjclass">
                     <el-option v-for="item in allObjectClass()" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="handCreate">Create</el-button>
-                <el-button @click="addObjectClass">new objectclass</el-button>
+            <el-form-item class="class-for-add-btn">
+                <div>
+                    <el-button type="primary" @click="handCreate">Create</el-button>
+                    <el-button type="primary" @click="addObjectClass">{{ addObjectBtn }}</el-button>
+                </div>
             </el-form-item>
         </el-form>
     </el-card>
@@ -68,10 +70,12 @@ import useLdap from '@/pages/api/useLdap'
 const emit = defineEmits(['created'])
 
 const route = useRoute()
-const router = useRouter()
 const objects = reactive([])
+const addObjectBtn = ref("select objectclass")
+
 const attributeStore = useObjectAttributes()
 const {addEntry} = useLdap()
+
 
 const formval = reactive({
     objectClass: [],
@@ -79,6 +83,13 @@ const formval = reactive({
     attrval: '',
 })
 const tempobjclass = ref('')
+
+function objectClassChange(value){
+    console.log("objectClassChange", value)
+    if (value !== ''){
+        addObjectBtn.value = "add objectclass"
+    }
+}
 
 function handCreate(){
     var dn = route.query.dn
@@ -159,5 +170,24 @@ function addObjectClass(){
 
 </script>
 <style lang="less" scoped>
-    
+    .class-for-dn{
+        display: flex;
+        max-width: 35vw;
+        width: 35vw;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .class-for-dn-select{
+            width: 15vw;
+        }
+    }
+
+    .class-for-add-btn{
+        :deep(.el-form-item__content){
+            justify-content: center;
+            gap: 20px;
+        }
+
+    }
+
 </style>

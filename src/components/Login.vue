@@ -1,6 +1,6 @@
 <template>
     <div class="login-page">
-        <el-card style="width:300px;margin:100px auto;">
+        <el-card style="max-width:50%;width:45vw;margin:100px auto;">
             <el-form @submit.prevent="handleLogin" @keyup.enter="handleLogin" class="login-form" label-width="80px">
                 <el-form-item label="Username">
                     <el-input v-model="username" autocomplete="off" />

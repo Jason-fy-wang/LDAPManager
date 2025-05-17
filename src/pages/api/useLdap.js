@@ -91,7 +91,7 @@ const useLdap = () => {
                     }
                     // match[4] MUST 属性
                     if (match[3]) {
-                        console.log("MUST match(1): ",names, match[0], match[4])
+                        //console.log("MUST match(1): ",names, match[0], match[4])
                         names.forEach(name => {
                             attributes[name]["MUST"] = {}
                             attributes[name]["MUST"] = match[3].trim().split(/\s*\$\s*/);  // 用 $ 分割 MUST 属性
