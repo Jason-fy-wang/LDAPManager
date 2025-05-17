@@ -5,9 +5,8 @@ import Home from '@/components/Home.vue'
 import Detail from '@/components/EntryDetail.vue'
 import Entryadd from '@/components/EntryAdd.vue'
 import Login from '@/components/Login.vue'
-import useLdap from "@/pages/api/useLdap"
+import { useObjectAttributes } from "@/store/ldapobjects"
 
-const { isLogin } = useLdap()
 const routers = createRouter({
     history: createWebHistory(),
     routes: [
@@ -39,17 +38,28 @@ const routers = createRouter({
 })
 
 routers.beforeEach(async (to, from, next) => {
-    const loginStatus = await isLogin()
+    const store  = useObjectAttributes()
+    const loginStatus = store.isLogin
     //console.log("beforeEach: ", to, from,loginStatus)
-    // not login
-    if (to.name !== "login" && !loginStatus) {
-        next({ name: "login" })
-        // already login
-    }else if (to.name === "login" && loginStatus) {
-        next({ name: "home" })
+
+    const publicPages = ["login"]
+
+    if (publicPages.includes(to.name)) {
+        if (loginStatus) {
+            next({ name: "home" })
+        }else{
+            next()
+        }
     }else{
-        next()
+
+        if (loginStatus) {
+            next()
+        }else{
+            next({ name: "login" })
+        }
+
     }
+
 })
 
 export default routers

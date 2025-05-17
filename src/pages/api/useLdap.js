@@ -1,5 +1,7 @@
-const useLdap = () => {
+import {useObjectAttributes} from "@/store/ldapobjects"
 
+const useLdap = () => {
+    const useLdapStore = useObjectAttributes()
     const searchAll = async () => {
         const res = await window.EAPI.searchAll()
         //console.log("render searchAll:", res)
@@ -37,8 +39,10 @@ const useLdap = () => {
         return await window.EAPI.login(host, port, user, passwd)
     }
 
-    const isLogin = async() => {
-        return await window.EAPI.isLogin()
+    const isLogin = () => {
+        const res = useLdapStore.isLogin
+        //console.log("isLogin: ", res)
+        return res
     }
 
     const getObjectAttribute = (objectClasses) => {

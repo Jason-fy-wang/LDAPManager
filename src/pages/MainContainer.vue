@@ -1,7 +1,7 @@
 <template>
 <div>
     <el-container class="main-container">
-      <el-aside class="main-side" v-show="isLogin">
+      <el-aside class="main-side" v-show="store.isLogin">
         <div class="left-side-image">
           <el-image :src="ldapimage"/>
         </div>
@@ -18,8 +18,14 @@
       </el-tree>
       </el-aside>
       <el-container class="main-content">
-        <el-header class="main-header" v-show="isLogin">
+        <el-header class="main-header" v-show="store.isLogin">
+          <div>
             <h2>Ldapmanager</h2>
+          </div>
+            <div class="user-profile">
+              <UserProfile :username="store.userName"/>
+              <el-image :src="ldapimage" style="height: 38px; width: 38px;" class="user-profile-image"/>
+            </div>
         </el-header>
         <el-main class="display-content">
           <RouterView v-slot="{Component}">
@@ -38,11 +44,15 @@ import { useRouter } from 'vue-router'
 import ldapimage from '@/assets/ldap.png'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+import {useObjectAttributes} from '@/store/ldapobjects'
+import UserProfile from '@/components/UserProfile.vue'
+
 const {searchAll, objectClasses, delEntry} = useLdap()
 
 let allAccount = ref([])
-let isLogin = ref(false)
+const store = useObjectAttributes()
 
+//console.log("isLogin = ", ", store = ", store.isLogin)
 const router = useRouter()
 const defaultProps = {
   children: 'children',
@@ -128,7 +138,6 @@ function reloadAllAccount() {
 }
 
 async function handleLogin() {
-  isLogin.value = true
   allAccount.value = await searchAll()
     //const res = await objectClasses()  
     //console.log("object class:", res)
@@ -222,7 +231,7 @@ function buildDn(maps,res) {
     }
 
     .main-header {
-      height: 10vh;
+      height: 18vh;
       background-color: #16142a;
       color: #97b1cd;
       border-bottom: 2px solid rgb(45, 49, 49);
@@ -231,6 +240,14 @@ function buildDn(maps,res) {
       justify-content: center;
       align-items: center;
       
+      .user-profile {
+        margin-left: auto;
+        margin-right: 2vw;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+      }
     }
 
     .main-side{

@@ -27,7 +27,9 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import useLdap from '@/pages/api/useLdap'
+import {useObjectAttributes} from '@/store/ldapobjects'
 
+const store = useObjectAttributes()
 const {login} = useLdap()
 const username = ref('cn=admin,dc=example,dc=com')
 const password = ref('')
@@ -36,11 +38,13 @@ const port = ref('389')
 const router = useRouter()
 const emit = defineEmits(['login'])
 
+
 function handleLogin(){
     login(host.value, port.value,username.value, password.value)
         .then((res) => {
             console.log('Login response:', res)
             if (res === true) {
+                store.login(username.value)
                 ElMessage.success('Login successful')
                 emit('login')
                 router.push({ name: 'home' })
