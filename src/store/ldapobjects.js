@@ -7,6 +7,8 @@ export const useObjectAttributes = defineStore("objectattribute",{
             attributes: {},
             loginState: false,
             loginName: "anonymous",
+            displayName: "anonymous",
+            domainName: "anonymous",
         }),
         getters: {
             isLogin: (state) => {
@@ -14,6 +16,12 @@ export const useObjectAttributes = defineStore("objectattribute",{
             },
             userName: (state) => {
                 return state.loginName
+            },
+            getDisplayName: (state) => {
+                return state.displayName
+            },
+            getDomainName: (state) => {
+                return state.domainName
             },
         },
         actions: {
@@ -27,6 +35,9 @@ export const useObjectAttributes = defineStore("objectattribute",{
             login(userName) {
                 this.loginState = true
                 this.loginName = userName
+                const names = userName.split(",")
+                this.displayName = names[0]
+                this.domainName = names.slice(1).join(",")
             },
             logout (){
                 this.loginState = false

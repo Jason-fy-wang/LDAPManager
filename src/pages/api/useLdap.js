@@ -2,8 +2,10 @@ import {useObjectAttributes} from "@/store/ldapobjects"
 
 const useLdap = () => {
     const useLdapStore = useObjectAttributes()
-    const searchAll = async () => {
-        const res = await window.EAPI.searchAll()
+
+    const searchAll = async (domain) => {
+        console.log("searchAll domain: ", domain)
+        const res = await window.EAPI.searchAll(domain)
         //console.log("render searchAll:", res)
         return res
     }

@@ -38,7 +38,7 @@ function IsLogin(){
     return login
 }
 
-async function LdapSearchAll() {
+async function LdapSearchAll(domainName) {
     try {
         await client.bind(user,pwd)
     }catch(ex) {
@@ -47,7 +47,9 @@ async function LdapSearchAll() {
     }
 
     try {
-        const {searchEntries, searchReferences} = await client.search("dc=example,dc=com", {
+        // const defautDomainName = "dc=example,dc=com"
+        console.log("LdapSearchAll domain: ", domainName)
+        const {searchEntries, searchReferences} = await client.search(domainName, {
             scope:"sub"
             //scope: "one"
             //scope: "base"

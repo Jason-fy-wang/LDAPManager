@@ -2,8 +2,8 @@ const{ipcRenderer,contextBridge} =  require('electron/renderer')
 
 
 contextBridge.exposeInMainWorld("EAPI", {
-    searchAll: () => {
-        res = ipcRenderer.invoke("ldap:all")
+    searchAll: (domain) => {
+        res = ipcRenderer.invoke("ldap:all",domain)
         return res
     },
     objectClasses: () => {

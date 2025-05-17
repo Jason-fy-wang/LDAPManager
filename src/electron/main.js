@@ -8,10 +8,11 @@ try {
 
 const createWindow = () => {
     const win = new BrowserWindow ({
-        width: 800,
-        height: 600,
+        width: 1200,
+        height: 800,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
+            devTools: true,
             //contextIsolation: false
         }
     })
@@ -24,6 +25,11 @@ const createWindow = () => {
         console.log("path: ", __dirname)
         win.loadURL("http://localhost:5173/")
         win.webContents.openDevTools()
+
+        // open devtools 
+        win.webContents.on("devtools-closed", () => {
+            win.webContents.openDevTools()
+        })
     }else {
         // production 
         const indexPath = path.join(process.resourcesPath,"app.asar","dist","index.html")
@@ -31,8 +37,8 @@ const createWindow = () => {
     }
 }
 
-function searchAll() {
-    result = LdapSearchAll()
+function searchAll(event,domain) {
+    result = LdapSearchAll(domain)
     return result
 }
 

@@ -23,7 +23,7 @@
             <h2>Ldapmanager</h2>
           </div>
             <div class="user-profile">
-              <UserProfile :username="store.userName"/>
+              <UserProfile :username="store.getDisplayName"/>
               <el-image :src="ldapimage" style="height: 38px; width: 38px;" class="user-profile-image"/>
             </div>
         </el-header>
@@ -132,13 +132,13 @@ function entryDelete(entry) {
 
 
 function reloadAllAccount() {
-  searchAll().then(res => {
+  searchAll(store.getDomainName).then(res => {
     allAccount.value = res
   })
 }
 
 async function handleLogin() {
-  allAccount.value = await searchAll()
+  allAccount.value = await searchAll(store.getDomainName)
     //const res = await objectClasses()  
     //console.log("object class:", res)
 
