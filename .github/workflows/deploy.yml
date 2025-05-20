@@ -9,26 +9,27 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up nodejs
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '22.14.0'
           registry-url: 'https://registry.npmjs.org/'
       
       - name: Install dependencies
         run: |
-          npm install -g cnpm
-          cnpm install
-          cnpm run build
+          npm install
+          npm run build
       
       - name: zip package
         run: |
           cd dist_electron
-          zip -r dist.zip win-unpacked
+          powershell Compress-Archive -Path win-unpacked -DestinationPath dist.zip
 
       - name: Upload package
         uses: actions/upload-artifact@v2
         with:
-          name: dist.zip
+          name: ldapmanager-win
+          path: dist_electron/dist.zip
+          retention-days: 5
