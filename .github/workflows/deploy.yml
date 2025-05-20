@@ -28,7 +28,7 @@ jobs:
           powershell Compress-Archive -Path win-unpacked -DestinationPath dist.zip
 
       - name: Upload package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ldapmanager-win
           path: dist_electron/dist.zip
