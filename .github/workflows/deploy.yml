@@ -1,0 +1,34 @@
+name: build package
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22.14.0'
+          registry-url: 'https://registry.npmjs.org/'
+      
+      - name: Install dependencies
+        run: |
+          npm install -g cnpm
+          cnpm install
+          cnpm run build
+      
+      - name: zip package
+        run: |
+          cd dist_electron
+          zip -r dist.zip win-unpacked
+
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist.zip
