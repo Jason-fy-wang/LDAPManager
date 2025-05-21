@@ -1,0 +1,2 @@
+@echo on
+powershell.exe -Command "start-process powershell -Verb RunAs -ArgumentList '-NoExit -Command Set-ExecutionPolicy RemoteSigned -Scope process;  d: ; cd $PWD; npm run build'" -WindowStyle Normal

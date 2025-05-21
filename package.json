@@ -19,7 +19,8 @@
     "electron_local": "cross-env NODE_ENV=dev electron .",
     "build:renderer": "vite build",
     "build:electron": "cross-env NODE_ENV=production electron-builder",
-    "build": "npm run clean && npm run build:renderer && npm run build:electron"
+    "build": "npm run clean && npm run build:renderer && npm run build:electron",
+    "cmd:build": "localbuild.cmd"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -45,6 +46,12 @@
     },
     "win": {
       "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
         {
           "target": "zip",
           "arch": [
