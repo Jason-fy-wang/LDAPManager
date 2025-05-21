@@ -30,7 +30,7 @@ jobs:
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
-          name: ldapmanager-win
+          name: ldapmanager-win-unpacked
           path: dist_electron/dist.zip
           retention-days: 2
       
