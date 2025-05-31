@@ -1,8 +1,15 @@
 import {cleanup} from '@testing-library/vue'
-import {expect, afterEach} from 'vitest'
+import {expect, afterEach, beforeEach} from 'vitest'
 import '@testing-library/jest-dom'
+import {setActivePinia, createPinia} from 'pinia'
 
 expect.extend({})
+
+beforeEach(() => {
+  // setup the Pinia store before each test
+  const pinia = createPinia()
+  setActivePinia(pinia)
+})
 
 afterEach(() => {
   // cleanup the DOM after each test
