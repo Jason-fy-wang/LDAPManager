@@ -24,8 +24,12 @@ export default defineConfig({
     setupFiles: "./test/setup.js",
     css: true,
     coverage: {
-      provider: "v8",
-      reporter: ["text", "json", "html"]
-    }
+      provider: "istanbul", //c8 v8
+      reporter: ["text", "json", "html"],
+      exclude: [
+        "node_modules/",
+        "src/electron/",
+      ],
+    },
   },
 })
