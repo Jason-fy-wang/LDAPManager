@@ -31,8 +31,6 @@ function testAttribute() {
     console.log(`ObjectClass Attributes:`, attributes);
 }
 
-//testAttribute()
-
 function testAttribute2() {
      // 正则表达式匹配 MUST 和 MAY 属性
      /**
@@ -144,4 +142,5 @@ function testGetParentObject(){
         console.log("==============================================================")
     }
 }
-//testGetParentObject()
+
+

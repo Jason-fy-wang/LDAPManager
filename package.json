@@ -20,7 +20,9 @@
     "build:renderer": "vite build",
     "build:electron": "cross-env NODE_ENV=production electron-builder",
     "build": "npm run clean && npm run build:renderer && npm run build:electron",
-    "cmd:build": "localbuild.cmd"
+    "cmd:build": "localbuild.cmd",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -66,11 +68,14 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "@vue/test-utils": "^2.4.6",
     "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "electron": "^35.2.1",
@@ -78,10 +83,12 @@
     "electron-reloader": "^1.2.3",
     "eslint": "^9.25.1",
     "eslint-plugin-vue": "^10.0.0",
+    "happy-dom": "^17.5.6",
     "less": "^4.2.0",
     "mocha": "^11.1.0",
     "rimraf": "^6.0.1",
     "vite": "^6.3.3",
+    "vitest": "^3.1.4",
     "wait-on": "^8.0.1"
   },
   "eslintConfig": {

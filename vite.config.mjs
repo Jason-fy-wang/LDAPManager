@@ -17,4 +17,15 @@ export default defineConfig({
     vueJsx()
   ],
   base: "./",
+  // testing configuration
+  test: {
+    globals: true,
+    environment: "happy-dom",  // happy-dom  jsdom  node
+    setupFiles: "./test/setup.js",
+    css: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"]
+    }
+  },
 })
