@@ -2,6 +2,8 @@ import {cleanup} from '@testing-library/vue'
 import {expect, afterEach, beforeEach} from 'vitest'
 import '@testing-library/jest-dom'
 import {setActivePinia, createPinia} from 'pinia'
+import 'element-plus/dist/index.css'
+
 
 expect.extend({})
 
