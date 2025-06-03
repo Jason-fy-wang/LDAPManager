@@ -29,6 +29,14 @@ jobs:
         run: |
           npm run build
       
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ldapmanager-win-unpacked
+          path: dist_electron/LdapManage-${{github.ref_name }}-win-x64.zip
+          retention-days: 1
+      
+
       - name: create github releases
         id: create_release
         uses: actions/create-release@v1
