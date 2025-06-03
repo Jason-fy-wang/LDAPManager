@@ -20,6 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+          npm run test:coverage
           npm run build
       
       - name: zip package
