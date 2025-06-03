@@ -11,7 +11,7 @@
             </el-form-item>
             <el-form-item label="dn">
                 <div class="class-for-dn">
-                    <el-select class="class-for-dn-select" placeholder="attribute" v-model="formval.attr">
+                    <el-select class="class-for-dn-select" placeholder="attribute" v-model="formval.attr" filterable>
                         <el-option v-for="item in getAllMustAttributes()" :label="item" :value="item" />
                     </el-select>
                     <el-input
@@ -46,7 +46,7 @@
             </el-form-item>
 
             <el-form-item label="objectclass">
-                <el-select @change="objectClassChange" placeholder="objectclass" v-model="tempobjclass">
+                <el-select @change="objectClassChange" placeholder="objectclass" v-model="tempobjclass" filterable>
                     <el-option v-for="item in allObjectClass()" :label="item" :value="item" />
                 </el-select>
             </el-form-item>
@@ -141,7 +141,11 @@ function getAllMustAttributes() {
     const must = []
     for (const obj of objects){
         if (attributeStore.attributes[obj]?.MUST){
-            must.push(...attributeStore.attributes[obj].MUST)
+            for(const tmp of attributeStore.attributes[obj].MUST) {
+                if (must.indexOf(tmp) < 0){
+                    must.push(tmp)
+                }
+            }
         }
         // get parent objectclass MUST attributes
         if (attributeStore.attributes[obj]?.SUP){
