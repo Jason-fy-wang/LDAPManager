@@ -1,6 +1,6 @@
 {
   "name": "ldapmanage",
-  "version": "v0.1.0",
+  "version": "0.1.0",
   "type": "commonjs",
   "author": {
     "name": "Jason",
@@ -61,6 +61,7 @@
           ]
         }
       ],
+      "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
       "icon": "public/favicon.ico",
       "requestedExecutionLevel": "asInvoker"
     }
