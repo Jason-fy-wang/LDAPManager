@@ -16,7 +16,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="handleLogin" data-testid="login-btn">Login</el-button>
-                    <el-button type="primary" @click="handleReset">Reset</el-button>
+                    <el-button type="primary" @click="handleReset" data-testid="reset-btn">Reset</el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -61,6 +61,8 @@ function handleLogin(){
 function handleReset(){
     username.value = ''
     password.value = ''
+    host.value = ''
+    port.value = ''
 }
 
 </script>

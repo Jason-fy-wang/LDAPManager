@@ -21,7 +21,7 @@
     "build:electron": "cross-env NODE_ENV=production electron-builder",
     "build": "npm run clean && npm run build:renderer && npm run build:electron",
     "cmd:build": "localbuild.cmd",
-    "test": "vitest",
+    "test": "vitest run --reporter=verbose",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
